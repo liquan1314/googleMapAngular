@@ -1,0 +1,10 @@
+<section id="right">
+    <div class="content">
+        <button [disabled]="flag" (click)="onProduct()">生成坐标以及列表</button>
+        <div *ngIf="dataArr.length !== 0 ">
+          <ul *ngFor="let item of dataArr;let i = index">
+            <li>{{item|json}} <button (click)="onChange(item)">改变中心点{{i+1}}</button></li>
+          </ul>
+        </div>
+    </div>
+</section>

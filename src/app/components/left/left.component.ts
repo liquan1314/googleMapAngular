@@ -67,6 +67,12 @@ export class LeftComponent implements OnInit {
         }
     })
   }
+  //修改多边形的颜色
+  onChangeColor(){
+    this.polygon.setOptions({
+      fillColor:'black',
+    })
+  }
   //绘画多边形
   paintPolygon(){
     this.mark.getData().subscribe(data=>{
@@ -79,7 +85,6 @@ export class LeftComponent implements OnInit {
         fillOpacity: 0.35,
       })
     })
-
     this.polygon.setMap(this.map)
   }
 }

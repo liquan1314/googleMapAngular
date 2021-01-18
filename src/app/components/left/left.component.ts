@@ -11,6 +11,8 @@ export class LeftComponent implements OnInit {
   map:any; //地图的下标
   locationCenter: Location = { lat: -34.397, lng: 150.644 };
   infoWindow:any;  //窗口信息
+  polygon:any;
+  markes:any[]; //这是坐标集合
   constructor(public mark: GetLocationDataService) { }
   //生命周期函数
   ngOnInit(): void {
@@ -38,12 +40,21 @@ export class LeftComponent implements OnInit {
       center: this.locationCenter,
       zoom:3
     });
-  }
+    google.maps.event.addDomListener(this.mapElement.nativeElement,'click',()=> {
+      if(this.markes!== undefined ){
+        this.markes.forEach(item=>{
+          item.setMap(null)
+        })
+        this.paintPolygon()
+      }
 
+    })
+  }
+  //监听模式
   listenerChange(){
     this.mark.listener.subscribe(data=>{
           this.mark.getData().subscribe(data=>{
-              data.forEach((item,index)=>{
+            this.markes = data.map((item,index)=>{
                 return new google.maps.Marker({
                   position:item,
                   map:this.map,
@@ -56,5 +67,19 @@ export class LeftComponent implements OnInit {
         }
     })
   }
+  //绘画多边形
+  paintPolygon(){
+    this.mark.getData().subscribe(data=>{
+      this.polygon = new google.maps.Polygon({
+        paths:data,
+        strokeColor: "#FF0000",
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: "#FF0000",
+        fillOpacity: 0.35,
+      })
+    })
 
+    this.polygon.setMap(this.map)
+  }
 }
